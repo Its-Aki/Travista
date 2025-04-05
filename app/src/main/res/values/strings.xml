@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Travista</string>
+    <string name="ic_home_label">Home</string>
+    <string name="ic_explore_label">Explore</string>
+    <string name="ic_trips_label">Trips</string>
+    <string name="ic_profile_label">Profile</string>
+</resources>
