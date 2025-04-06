@@ -50,8 +50,8 @@ fun TripsScreen() {
 
 
       //  DestinationFullDetailsScreen(samplePlaceId,sampleApiKey)
-         SearchScreen()
 
+        DestinationDescription(placeName = "Hazaribagh", placeAddress = "Jharkhand")
 
 
     }
