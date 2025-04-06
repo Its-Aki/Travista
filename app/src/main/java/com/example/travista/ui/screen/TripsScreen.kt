@@ -2,18 +2,17 @@ package com.example.travista.ui.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.travista.data.getApikey
+
 import com.example.travista.theme.TravistaTheme
+
 
 @Composable
 fun TripsScreen() {
     val scrollState = rememberScrollState()
     // /* for hotels
-     val sampleApiKey = getApikey()
+
     val samplePlaceId = "ChIJo9jLZ7id9DkRXoH-O-TR3QQ"
 
 
@@ -47,11 +46,11 @@ fun TripsScreen() {
     // samplePlaceId = "ChIJDXsf19dYWjcRagXRo68vpkw"
     // for everest
     //mount everest   -- >   samplePlaceId = "ChIJvZ69FaJU6DkRsrqrBvjcdgU"
-    Column(Modifier.verticalScroll(scrollState)) {
-     //   HotelScreen(samplePlaceId,sampleApiKey)
+    Column() {
 
-        DestinationFullDetailsScreen(samplePlaceId,sampleApiKey)
-      //   HotelScreen("ChIJvZ69FaJU6DkRsrqrBvjcdgU",sampleApiKey)
+
+      //  DestinationFullDetailsScreen(samplePlaceId,sampleApiKey)
+         SearchScreen()
 
 
 
