@@ -8,7 +8,7 @@ import com.example.travista.theme.TravistaTheme
 
 @Composable
     fun ExploreScreen() {
-        DestinationDescription(placeName = "Hazaribagh", placeAddress = "Jharkhand")
+    SearchScreen()
     }
 
     @Preview(showBackground = true)
