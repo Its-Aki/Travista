@@ -1,5 +1,4 @@
-// contains list of bottom nav items (route, icons and label)
-package com.example.travista.ui.screen
+package com.example.travista.ui.navigation.rootnavigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
@@ -8,7 +7,6 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.travista.R
-
 
 sealed class BottomNavItems(
     val route: String,

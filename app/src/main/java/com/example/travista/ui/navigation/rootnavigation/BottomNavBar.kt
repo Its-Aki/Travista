@@ -1,4 +1,5 @@
-package com.example.travista.ui.screen
+package com.example.travista.ui.navigation.rootnavigation
+
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -18,11 +19,7 @@ fun BottomNavBar(navController: NavController) {
         BottomNavItems.Trips,
         BottomNavItems.Profile
     )
-//    Text(
-//        text = "Rating: $item4 ⭐",
-//        modifier = Modifier.fillMaxWidth(),
-//        fontSize = 14.sp
-//    )
+
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -32,13 +29,14 @@ fun BottomNavBar(navController: NavController) {
             NavigationBarItem(
                 selected = currentRoute == item.route,
                 onClick = {
-                    if (currentRoute != item.route) { // Prevents adding duplicate instances
-                        navController.navigate(item.route) {
-                            popUpTo(navController.graph.startDestinationId) { saveState = true }
-                            launchSingleTop = true // Ensures only one instance
-                            restoreState = true
+                    navController.navigate(item.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
                         }
+                        launchSingleTop = true
+                        restoreState = true
                     }
+
                 },
                 icon = { Icon(imageVector = item.bottomNavIcons, contentDescription = null) },
                 label = { Text(text = stringResource(id = item.label)) }

@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -34,6 +36,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.travista.R
 import com.example.travista.data.detinationfulldetails.getPriceLevelText
+import com.example.travista.data.getApikey
 import com.example.travista.ui.viewmodel.DestinationFullDetailsViewModel
 import com.example.travista.utils.isNetworkAvailable
 
@@ -41,11 +44,12 @@ import com.example.travista.utils.isNetworkAvailable
 @Composable
 fun DestinationFullDetailsScreen(
     placeId: String,
-    apiKey: String,
+    apiKey: String = getApikey(),
 ) {
     val viewModel: DestinationFullDetailsViewModel = hiltViewModel() // Use Hilt to inject ViewModel
     val context = LocalContext.current
     val destinationState by viewModel.destinationFullDetails.collectAsState()
+    val scrollState = rememberScrollState()
 
 
     // Automatically fetch data when this composable is launched
@@ -59,7 +63,7 @@ fun DestinationFullDetailsScreen(
 
 //    Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState)) {
     // removing scroll for checking
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState)) {
         when {
             false -> {
                 CircularProgressIndicator()
@@ -202,7 +206,7 @@ fun DestinationFullDetailsScreen(
                             }
                             Button(
                                 onClick = {
-                                    //  val placeId = placeId // Replace with the actual Place ID
+
                                     val mapsUrl = it.googleMapsUrl
                                     // "https://www.google.com/maps/search/?api=1&query=${Uri.encode(it.name+"," + it.address)}"
                                     val intent = Intent(Intent.ACTION_VIEW, mapsUrl?.toUri())
@@ -224,6 +228,7 @@ fun DestinationFullDetailsScreen(
                             }
 
                             // reviews end here
+                            Spacer(Modifier.padding(30.dp))
                         }
                     }
                 }

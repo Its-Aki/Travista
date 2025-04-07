@@ -46,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.travista.R
@@ -54,7 +55,7 @@ import com.example.travista.theme.TravistaTheme
 @Composable
 // main composable for profile screen
 
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavController) {
 
     //////////
 
@@ -288,6 +289,6 @@ fun SettingsRowWithImage(iconResId: Int, text: String, contentDescription: Strin
 @Composable
 fun ProfileScreenPreview() {
     TravistaTheme {
-        ProfileScreen()
+        ProfileScreen(navController = NavController(LocalContext.current))
     }
 }

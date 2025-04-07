@@ -45,7 +45,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.travista.data.detailsofdestinaton.DetailsOFDestination
+import com.example.travista.data.getApikey
+import com.example.travista.ui.navigation.tabnavigation.ScreenNavigation
 import com.example.travista.ui.viewmodel.DestinationViewModel
 import com.example.travista.utils.isNetworkAvailable
 
@@ -53,13 +56,15 @@ import com.example.travista.utils.isNetworkAvailable
 @Composable
 fun DestinationDescription(
     placeName: String,
-    placeAddress: String
+    placeAddress: String,
+    navController: NavController
 ) {
     val viewModel: DestinationViewModel = hiltViewModel()
     val context = LocalContext.current
     val hotelResult by viewModel.topHotelData.collectAsState(initial = Result.success(emptyList()))
     val restaurantResult by viewModel.topRestaurantData.collectAsState(initial = Result.success(emptyList()))
     val attractionResult by viewModel.topAttractionsData.collectAsState(initial = Result.success(emptyList()))
+
 
     LaunchedEffect(placeName, placeAddress) {
         if (isNetworkAvailable(context)) {
@@ -71,14 +76,17 @@ fun DestinationDescription(
 
 
     Column(modifier = Modifier.fillMaxSize()) {
-        TopBar(placeName)
-        ContentScreen(hotelResult, restaurantResult, attractionResult)
+        TopBar(placeName,navController)
+        ContentScreen(
+            hotelResult, restaurantResult, attractionResult,
+            navController
+        )
     }
 }
 
 // top bar composable with title, back button and favorite icon
 @Composable
-fun TopBar(placeName:String) {
+fun TopBar(placeName:String,navController: NavController) {
     var isFavorited by rememberSaveable { mutableStateOf(false) }
     Row(
         modifier = Modifier
@@ -86,7 +94,8 @@ fun TopBar(placeName:String) {
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = { /* Handle back action */ }) {
+        IconButton(onClick = { /* Handle back action */
+        navController.popBackStack()}) {
             Icon(
                 imageVector = Icons.Outlined.ArrowBackIosNew,
                 contentDescription = "Back"
@@ -125,7 +134,8 @@ fun TopBar(placeName:String) {
 fun ContentScreen(
     hotelResult: Result<List<DetailsOFDestination>>,
     restaurantResult: Result<List<DetailsOFDestination>>,
-    attractionResult: Result<List<DetailsOFDestination>>
+    attractionResult: Result<List<DetailsOFDestination>>,
+    navController: NavController
 ) {
     val scrollState = rememberScrollState()
     val imageUrlList  = listOf(
@@ -141,7 +151,8 @@ fun ContentScreen(
         modifier = Modifier.verticalScroll(scrollState),
 
     ) {
-        ImageCarousel(imageUrlList)
+       ImageCarousel(imageUrlList)
+
         Column(Modifier.padding(start = 4.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
             ExpandableText("highdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsddhighdfsdd ")
@@ -156,7 +167,7 @@ fun ContentScreen(
                 fontSize = 24.sp
             )
             Text("Handpicked stays for an unforgettable experience!")
-            ShowPlacesCarousel(hotelResult)
+            ShowPlacesCarousel(hotelResult,navController)
 
             Spacer(modifier = Modifier.padding(4.dp))
 
@@ -168,7 +179,7 @@ fun ContentScreen(
                 fontSize = 24.sp
             )
             Text("Discover your next favorite eatery!")
-            ShowPlacesCarousel(restaurantResult)
+            ShowPlacesCarousel(restaurantResult,navController)
 
             Spacer(modifier = Modifier.padding(4.dp))
 
@@ -180,13 +191,17 @@ fun ContentScreen(
                 fontSize = 24.sp
             )
             Text("Discover must-do activities in the area!")
-            ShowPlacesCarousel(attractionResult)
+            ShowPlacesCarousel(attractionResult, navController)
+
+            Spacer(modifier = Modifier.padding(40.dp))
+
         }
     }
 }
 
+
 @Composable
-fun ShowPlacesCarousel(result: Result<List<DetailsOFDestination>>) {
+fun ShowPlacesCarousel(result: Result<List<DetailsOFDestination>>,navController: NavController) {
     when {
         result.isSuccess -> {
             val places = result.getOrNull().orEmpty()
@@ -196,7 +211,10 @@ fun ShowPlacesCarousel(result: Result<List<DetailsOFDestination>>) {
                     placeId = places.map { it.placeId },
                     photoUrlList = places.map { it.getDestinationPhotoUrl() ?: "https://plus.unsplash.com/premium_photo-1725943391552-ac450c795074?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
                     placeRating = places.map { it.rating },
-                    placeTotalRatings = places.map { it.totalRatings }
+                    placeTotalRatings = places.map { it.totalRatings },
+                    onCardClick = { placeId,_,_ ->
+                        navController.navigate(ScreenNavigation.DestinationFullDetails.passArgs(placeId = placeId))
+                    }
                 )
             } else {
                 Text(text="No hotels found!!")

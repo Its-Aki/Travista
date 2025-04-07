@@ -1,19 +1,20 @@
 package com.example.travista.ui.screen
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.travista.theme.TravistaTheme
 
 
 @Composable
-fun TripsScreen() {
-    val scrollState = rememberScrollState()
+fun TripsScreen(navController: NavController) {
+   // val scrollState = rememberScrollState()
     // /* for hotels
 
-    val samplePlaceId = "ChIJo9jLZ7id9DkRXoH-O-TR3QQ"
+   // val samplePlaceId = "ChIJo9jLZ7id9DkRXoH-O-TR3QQ"
 
 
    //    */
@@ -47,11 +48,13 @@ fun TripsScreen() {
     // for everest
     //mount everest   -- >   samplePlaceId = "ChIJvZ69FaJU6DkRsrqrBvjcdgU"
     Column() {
+        Text("Work in progress!!!",fontSize= 50.sp)
+
 
 
       //  DestinationFullDetailsScreen(samplePlaceId,sampleApiKey)
-         SearchScreen()
 
+      //  DestinationDescription(placeName = "Hazaribagh", placeAddress = "Jharkhand",navController)
 
 
     }
@@ -63,6 +66,6 @@ fun TripsScreen() {
 @Composable
 fun TripsScreenPreview() {
     TravistaTheme {
-        TripsScreen()
+
     }
 }

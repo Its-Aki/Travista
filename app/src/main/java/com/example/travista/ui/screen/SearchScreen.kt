@@ -1,5 +1,6 @@
 package com.example.travista.ui.screen
 
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,13 +17,15 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.example.travista.ui.navigation.tabnavigation.ScreenNavigation
 import com.example.travista.ui.viewmodel.AutocompleteViewModel
 import kotlinx.coroutines.delay
 
 @Composable
 fun SearchScreen(
     viewModel: AutocompleteViewModel = hiltViewModel(),
-    // navController: NavController
+     navController: NavController
 ) {
     var textState by remember { mutableStateOf(TextFieldValue("")) }
     val suggestions = viewModel.suggestions.collectAsState()
@@ -89,9 +92,9 @@ fun SearchScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            // val name = mainText
-                            // val address = secondaryText
-                            // navController.navigate("details_screen/${name}/${address}")
+                            val name = mainText
+                             val address = secondaryText
+                            navController.navigate(ScreenNavigation.Destination.passArgs(placeName =name, address = address))
                         },
                     shape = MaterialTheme.shapes.large,
                     colors = CardDefaults.elevatedCardColors(

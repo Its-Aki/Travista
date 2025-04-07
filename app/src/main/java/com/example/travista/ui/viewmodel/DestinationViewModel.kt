@@ -24,6 +24,9 @@ class DestinationViewModel @Inject constructor(
     private val _topAttractionsData = MutableStateFlow<Result<List<DetailsOFDestination>>>(Result.success(emptyList()))
     val topAttractionsData: StateFlow<Result<List<DetailsOFDestination>>> = _topAttractionsData
 
+
+
+
     private var hasFetchedData = false
 
     fun fetchDestinationData(placeName: String, placeAddress: String) {
@@ -33,6 +36,7 @@ class DestinationViewModel @Inject constructor(
             _topHotelData.value = placesRepository.fetchTopHotels(placeName, placeAddress)
             _topRestaurantData.value = placesRepository.fetchTopRestaurants(placeName, placeAddress)
             _topAttractionsData.value = placesRepository.fetchTopAttractions(placeName, placeAddress)
+
 
             hasFetchedData = true
         }

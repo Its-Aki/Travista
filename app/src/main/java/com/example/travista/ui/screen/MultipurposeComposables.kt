@@ -107,7 +107,7 @@ fun PlacesCarousel(
 // place card composable
 @Composable
 fun PlaceCard(
-    placeName: String,
+    placeName: String ,
     photoUrl: String,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
@@ -125,7 +125,9 @@ fun PlaceCard(
                 .height(250.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(Color.Gray)
-                .clickable { onClick() }
+                .clickable { onClick(
+
+                ) }
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
