@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.travista.data.detailsofdestinaton.DetailsOFDestination
 import com.example.travista.repository.detailsofdestination.PlacesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -33,12 +34,15 @@ class DestinationViewModel @Inject constructor(
         if (hasFetchedData) return
 
         viewModelScope.launch {
+
             _topHotelData.value = placesRepository.fetchTopHotels(placeName, placeAddress)
             _topRestaurantData.value = placesRepository.fetchTopRestaurants(placeName, placeAddress)
             _topAttractionsData.value = placesRepository.fetchTopAttractions(placeName, placeAddress)
 
 
+
             hasFetchedData = true
+
         }
     }
 }

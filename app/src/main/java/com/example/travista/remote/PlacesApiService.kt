@@ -23,7 +23,8 @@ interface PlacesApiService {
     @GET("textsearch/json")
     suspend fun getTopDestinations(
         @Query("query") query: String,
-        @Query("key") apiKey: String
+        @Query("key") apiKey: String,
+        @Query("rankby") rankBy: String = "prominence"
     ): Response<TopDestinationsResponse>
 
     @GET("textsearch/json")
@@ -36,7 +37,7 @@ interface PlacesApiService {
         suspend fun getPlaceSuggestions(
             @Query("input") input: String,
             @Query("key") apiKey: String,
-            @Query("types") types: String = "(cities)"
+            @Query("types") types: String = "(regions)"
         ): AutocompleteResponse
 }
 

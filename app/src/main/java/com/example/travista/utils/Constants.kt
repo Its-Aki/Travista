@@ -1,3 +1,3 @@
 package com.example.travista.utils
 
-val API_KEY=""
+val API_KEY=" "

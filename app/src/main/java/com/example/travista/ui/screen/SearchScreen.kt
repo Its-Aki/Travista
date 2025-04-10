@@ -1,14 +1,33 @@
 package com.example.travista.ui.screen
 
-import android.net.Uri
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -42,11 +61,9 @@ fun SearchScreen(
 
     // Manual debounce logic
     LaunchedEffect(textState.text) {
-        if (textState.text.length >= 2) {
+        if (textState.text.length > 2) {
             delay(400)
             viewModel.fetchSuggestions(textState.text)
-        } else {
-            viewModel.fetchSuggestions("")
         }
     }
 
@@ -87,14 +104,16 @@ fun SearchScreen(
             items(suggestions.value) { prediction ->
                 val mainText = prediction.structured_formatting.main_text
                 val secondaryText = prediction.structured_formatting.secondary_text
+                val placeId = prediction.place_id
 
                 ElevatedCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
                             val name = mainText
-                             val address = secondaryText
-                            navController.navigate(ScreenNavigation.Destination.passArgs(placeName =name, address = address))
+                            val address = secondaryText
+                            val photoId = placeId
+                            navController.navigate(ScreenNavigation.Destination.passArgs(placeName =name, address = address,placeId = photoId))
                         },
                     shape = MaterialTheme.shapes.large,
                     colors = CardDefaults.elevatedCardColors(

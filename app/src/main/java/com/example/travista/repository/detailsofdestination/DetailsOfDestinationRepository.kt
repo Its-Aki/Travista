@@ -13,15 +13,15 @@ class PlacesRepository @Inject constructor(
     private val apiService: PlacesApiService
 ) {
     suspend fun fetchTopHotels(placeName: String, placeAddress: String): Result<List<DetailsOFDestination>> {
-        return fetchPlaces("top hotels in $placeName, $placeAddress")
+        return fetchPlaces("top hotels near $placeName, $placeAddress")
     }
 
     suspend fun fetchTopRestaurants(placeName: String, placeAddress: String): Result<List<DetailsOFDestination>> {
-        return fetchPlaces("top restaurants in $placeName, $placeAddress")
+        return fetchPlaces("top restaurants near $placeName, $placeAddress")
     }
 
     suspend fun fetchTopAttractions(placeName: String, placeAddress: String): Result<List<DetailsOFDestination>> {
-        return fetchPlaces("things to do  in $placeName, $placeAddress")
+        return fetchPlaces("top things to do near $placeName, $placeAddress")
     }
 
     private suspend fun fetchPlaces(query: String): Result<List<DetailsOFDestination>> {

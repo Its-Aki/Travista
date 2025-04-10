@@ -10,12 +10,12 @@ data class DestinationFullDetails(
     @SerializedName("url") val googleMapsUrl: String? = "Not Available",
     @SerializedName("rating") val rating: Double? = 0.0,
     @SerializedName("user_ratings_total") val totalRatings: Int? = 0,
-    @SerializedName("price_level") val priceLevel: Int? = -1, // Can be mapped to text
+    @SerializedName("price_level") val priceLevel: Int? = -1,
     @SerializedName("opening_hours") val openingHours: OpeningHours? = null,
     @SerializedName("reviews") val reviews: List<Review>? = emptyList(),
     @SerializedName("photos") val photos: List<Photo>? = emptyList(),
-    @SerializedName("geometry") val geometry: Geometry? = null, // ✅ Made nullable
-    @SerializedName("types") val types: List<String>? = listOf("Not Available") //() // ✅ Renamed for clarity
+    @SerializedName("geometry") val geometry: Geometry? = null,
+    @SerializedName("types") val types: List<String>? = listOf("Not Available")
 )
 
 // ✅ Location Details (Latitude & Longitude)

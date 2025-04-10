@@ -3,7 +3,7 @@ package com.example.travista.data
 object CityQueryGenerator {
 
     private val topTourismCountries = listOf(
-    "France", "Spain", "United States", "China", "Italy", "Turkey", "Mexico", "Thailand", "Germany", "United Kingdom",
+    "France", "Spain", "United States", "China", "Italy", "Turkey", "Mexico", "Thailand", "United Kingdom",
     "Japan", "Austria", "Greece", "Malaysia", "Russia", "Portugal", "Canada", "Poland", "Netherlands", "Saudi Arabia",
     "Hungary", "Hong Kong", "South Korea", "India", "Vietnam", "Czech Republic", "Ukraine", "Switzerland", "Sweden", "Indonesia",
     "Croatia", "Belgium", "Egypt", "Australia", "Singapore", "Morocco", "Brazil", "United Arab Emirates", "Ireland", "South Africa",

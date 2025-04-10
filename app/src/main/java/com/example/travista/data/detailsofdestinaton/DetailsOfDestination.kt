@@ -15,6 +15,7 @@ data class DetailsOFDestination(
     @SerializedName("rating")
     val rating: Double? = 0.0,  // Default rating to 0.0
 
+
     @SerializedName("user_ratings_total")
     val totalRatings: Int? = 0,  // Default total ratings to 0
 

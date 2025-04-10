@@ -47,40 +47,66 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.travista.data.detailsofdestinaton.DetailsOFDestination
+import com.example.travista.data.detinationfulldetails.DestinationFullDetails
 import com.example.travista.data.getApikey
 import com.example.travista.ui.navigation.tabnavigation.ScreenNavigation
+import com.example.travista.ui.viewmodel.DestinationFullDetailsViewModel
 import com.example.travista.ui.viewmodel.DestinationViewModel
 import com.example.travista.utils.isNetworkAvailable
+import kotlinx.coroutines.delay
 
 
 @Composable
 fun DestinationDescription(
     placeName: String,
     placeAddress: String,
-    navController: NavController
+    placeId: String,
+    navController: NavController,
+    viewModel: DestinationViewModel = hiltViewModel(),
+    photoViewModel: DestinationFullDetailsViewModel = hiltViewModel()
 ) {
-    val viewModel: DestinationViewModel = hiltViewModel()
     val context = LocalContext.current
+
     val hotelResult by viewModel.topHotelData.collectAsState(initial = Result.success(emptyList()))
     val restaurantResult by viewModel.topRestaurantData.collectAsState(initial = Result.success(emptyList()))
     val attractionResult by viewModel.topAttractionsData.collectAsState(initial = Result.success(emptyList()))
+    val photoResult by photoViewModel.destinationFullDetails.collectAsState()
 
+    val hasNetwork = isNetworkAvailable(context)
 
-    LaunchedEffect(placeName, placeAddress) {
-        if (isNetworkAvailable(context)) {
+    var showLoading by remember { mutableStateOf(true) }
+
+    LaunchedEffect(placeName, placeId, placeAddress) {
+        val isAlreadyLoaded =
+            !hotelResult.getOrNull().isNullOrEmpty() &&
+                    !restaurantResult.getOrNull().isNullOrEmpty() &&
+                    !attractionResult.getOrNull().isNullOrEmpty() &&
+                    !(photoResult?.getOrNull()?.photos.isNullOrEmpty())
+
+        if (!isAlreadyLoaded && hasNetwork) {
             viewModel.fetchDestinationData(placeName, placeAddress)
-        } else {
+            photoViewModel.fetchDestinationFullDetails(placeId, getApikey())
+            delay(1300)
+            showLoading = false
+        } else if (!isAlreadyLoaded && !hasNetwork) {
             Toast.makeText(context, "No internet connection", Toast.LENGTH_SHORT).show()
+            showLoading = true
+        } else {
+            // Data already loaded, no API call
+            showLoading = false
         }
     }
 
-
-    Column(modifier = Modifier.fillMaxSize()) {
-        TopBar(placeName,navController)
-        ContentScreen(
-            hotelResult, restaurantResult, attractionResult,
-            navController
-        )
+    if (showLoading) {
+        LoadingLottieAnimation()
+    } else {
+        Column(modifier = Modifier.fillMaxSize()) {
+            TopBar(placeName, navController)
+            ContentScreen(
+                hotelResult, restaurantResult, attractionResult, photoResult,
+                navController
+            )
+        }
     }
 }
 
@@ -135,23 +161,17 @@ fun ContentScreen(
     hotelResult: Result<List<DetailsOFDestination>>,
     restaurantResult: Result<List<DetailsOFDestination>>,
     attractionResult: Result<List<DetailsOFDestination>>,
+    photoResult: Result<DestinationFullDetails>?,
     navController: NavController
 ) {
     val scrollState = rememberScrollState()
-    val imageUrlList  = listOf(
-        "https://plus.unsplash.com/premium_photo-1737014310079-8ccace85550f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://plus.unsplash.com/premium_photo-1731830999541-3f7c34dddff2?q=80&w=2143&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://images.unsplash.com/photo-1727773362407-85e4b8a49f0e?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://images.unsplash.com/photo-1741184353774-c80d8eb5b2ae?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://plus.unsplash.com/premium_photo-1742537330551-d0769072dbe8?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        " "
-    )
+
 
     Column(
         modifier = Modifier.verticalScroll(scrollState),
 
     ) {
-       ImageCarousel(imageUrlList)
+     showPhoto(photoResult)
 
         Column(Modifier.padding(start = 4.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -239,9 +259,7 @@ private fun ExpandableText(summary:String) {
     val isButtonShown by remember { derivedStateOf { isExpandable || isExpanded } }
     val interactionSource = remember { MutableInteractionSource() } // for removing ripple effect
 
-    Column(
-
-    ) {
+    Column{
 
 
         Text(
@@ -265,6 +283,46 @@ private fun ExpandableText(summary:String) {
                 modifier = Modifier.clickable { isExpanded = !isExpanded }
             )
 
+        }
+    }
+}
+// composable to display images in the imagecarousel after fetching photoreference
+@Composable
+fun showPhoto(result: Result<DestinationFullDetails>?)
+{
+    when {
+        false -> {
+            CircularProgressIndicator()
+        }
+
+
+        result?.isFailure == true -> {
+            Text("Error: ${result.exceptionOrNull()?.message}")
+        }
+
+        result?.isSuccess == true -> {
+            val destinationFullDetails = result.getOrNull()
+            destinationFullDetails?.let {
+                val defaultImageUrls = listOf(
+                    "https://plus.unsplash.com/premium_vector-1739976218147-36f2581a0bbd?q=80&w=2148&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                )
+
+                // Fallback to default images if no photos are available
+                val photoUrls = it.photos?.mapNotNull { photo ->
+                    photo.photoReference?.let { reference ->
+                        "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$reference&key=${getApikey()}"
+                    }
+                } ?: emptyList()
+
+                // Image Carousel for displaying images of restaurant if available
+                if (photoUrls.isEmpty()) {
+                    ImageCarousel(imageUrls = defaultImageUrls)
+                } else {
+                    ImageCarousel(imageUrls = photoUrls)
+                }
+
+
+            }
         }
     }
 }

@@ -104,6 +104,10 @@ dependencies {
     implementation(libs.gson) // Gson
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+    implementation(libs.accompanist.navigation.animation)
+    implementation(libs.lottie.compose)
+
+
 
     // Room
     implementation(libs.androidx.room.runtime)

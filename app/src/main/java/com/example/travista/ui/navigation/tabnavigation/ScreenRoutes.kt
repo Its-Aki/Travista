@@ -6,8 +6,8 @@ sealed class ScreenNavigation(val route: String){
     object MainHome: ScreenNavigation("main_home")
     object MainExplore: ScreenNavigation("main_explore")
     object Destination:ScreenNavigation("destination") {
-        fun passArgs(placeName: String, address: String): String {
-            return "$route/${Uri.encode(placeName)}/${Uri.encode(address)}"
+        fun passArgs(placeName: String, address: String,placeId: String): String {
+            return "$route/${Uri.encode(placeName)}/${Uri.encode(address)}/${Uri.encode(placeId)}"
         }
     }
     object DestinationFullDetails: ScreenNavigation("destination_full_details"){

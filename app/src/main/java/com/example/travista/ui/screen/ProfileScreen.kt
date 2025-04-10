@@ -57,7 +57,7 @@ import com.example.travista.theme.TravistaTheme
 
 fun ProfileScreen(navController: NavController) {
 
-    //////////
+
 
     val scrollState = rememberScrollState()
     Column(modifier = Modifier.padding(0.dp)

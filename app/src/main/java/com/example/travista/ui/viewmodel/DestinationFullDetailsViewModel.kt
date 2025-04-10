@@ -16,10 +16,10 @@ class DestinationFullDetailsViewModel @Inject constructor(private val repository
 
     private val _destinationFullDetails = MutableStateFlow<Result<DestinationFullDetails>?>(null)
     val destinationFullDetails: StateFlow<Result<DestinationFullDetails>?> = _destinationFullDetails
-//    val destinationFullDetails: StateFlow<Result<DestinationFullDetails>>?> = _destinationFullDetails
+
 
     fun fetchDestinationFullDetails(placeId: String, apiKey: String) {
-        // it allows to define a coroutine within the scope of viewmodel
+        // it allows us to define a coroutine within the scope of viewmodel
         viewModelScope.launch {
             _destinationFullDetails.value = repository.fetchDestinationFullDetails(placeId, apiKey)
         }

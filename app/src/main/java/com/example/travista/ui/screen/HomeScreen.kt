@@ -63,9 +63,9 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun HomeScreen(
-    homeNavController: NavController,rootNavController: NavController,
-    //onPlaceClick: (placeId: String, name: String, address: String?) -> Unit = { _, _, _ -> }
+    homeNavController: NavController,rootNavController: NavController
 ) {
+
     val viewModel: TopDestinationsViewModel = hiltViewModel()
     val scrollState = rememberLazyListState()
     val isScrolled = remember {
@@ -79,9 +79,6 @@ fun HomeScreen(
             item {
                 BackgroundWithSearch(
                     onSearchClick = {
-
-
-                       //  homeNavController.navigate(ScreenNavigation.Destination.passArgs(placeName = encodedName, address = encodedAddress))
                     },rootNavController = rootNavController
                 )
             }
@@ -115,11 +112,12 @@ fun HomeScreen(
                                 placeTotalRatings = List(data.size) { null },
                                 descriptionList = List(data.size) { null },
                                 extraInfoList = List(data.size) { null },
-                                onCardClick =  { _, name, address ->
+                                onCardClick =  { placeId, name, address ->
                                     val name = name
                                     val address = address
+                                    val placeId = placeId
                                     homeNavController.navigate(
-                                        ScreenNavigation.Destination.passArgs(placeName = name, address = address.toString())
+                                        ScreenNavigation.Destination.passArgs(placeName = name, address = address.toString(), placeId = placeId)
                                     )
                                 }
                             )
@@ -148,10 +146,7 @@ fun HomeScreen(
         ) {
             StickySearchBar(
                 onSearchClick = {
-                    // Example navigation call (you can update this):
-                    // val encodedName = Uri.encode("Paris")
-                    // val encodedAddress = Uri.encode("France")
-                    // navController.navigate("destination/$encodedName/$encodedAddress")
+                   
                 }, rootNavController = rootNavController
             )
         }
